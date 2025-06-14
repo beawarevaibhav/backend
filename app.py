@@ -7,22 +7,24 @@ from routes.resume import resume_bp
 from routes.auth import auth_bp
 from models.resume import db
 import io
+import os  # <-- You were missing this import
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for frontend-backend communication
+CORS(app)
 
-# 🔧 Database Config (SQLite for now)
+# 🔧 Database Config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///resumes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# Initialize DB with app
 db.init_app(app)
 
-# Register blueprints
+# Register routes
 app.register_blueprint(resume_bp)
 app.register_blueprint(auth_bp)
 
-# 🔍 Resume Grading Endpoint
+@app.route('/')
+def home():
+    return "Server is live!"
+
 @app.route('/api/grade', methods=['POST'])
 def grade_resume():
     if 'resume' not in request.files:
@@ -48,9 +50,10 @@ def grade_resume():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# ✅ Ensure DB tables are created when starting
-if __name__ == '__main__':
+# ✅ Run the app with proper config for Render
+if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
-    app.run(host='0.0.0.0', port=5000, debug=True)
+
