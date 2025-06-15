@@ -1,4 +1,8 @@
+from dotenv import load_dotenv
+import os
 import openai
+
+load_dotenv()
 
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -13,6 +17,6 @@ def generate_feedback(sections):
             ]
         )
         feedback_text = response.choices[0].message.content.strip()
-        return feedback_text.split("\n")  # split by lines for UI
+        return feedback_text.split("\n")
     except Exception as e:
         return [f"Error generating feedback: {str(e)}"]
