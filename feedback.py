@@ -1,30 +1,30 @@
 def generate_feedback(sections):
-    feedback = []
-    text = sections.get("text", "").lower()
+    try:
+        text = sections.get("text", "").lower()
+        feedback = []
 
-    # Custom rules based on content
-    if "internship" in text and "experience" not in text:
-        feedback.append("You mentioned internships — consider labeling them clearly under 'Experience'.")
-    
-    if "python" in text and "projects" not in text:
-        feedback.append("You know Python — consider showcasing it with real-world projects.")
+        # Check for LinkedIn link
+        if "linkedin.com" not in text:
+            feedback.append("Include a link to your LinkedIn profile.")
 
-    if "b.tech" in text or "engineering" in text:
-        feedback.append("Tailor your resume for engineering roles by adding technical achievements.")
+        # Check if resume has less than 200 words
+        word_count = len(text.split())
+        if word_count < 200:
+            feedback.append("Your resume seems short — try adding more accomplishments.")
 
-    if "mba" in text:
-        feedback.append("Highlight leadership roles or business-related achievements.")
+        # Check for experience
+        if "experience" not in text:
+            feedback.append("Include a work experience section with job titles and responsibilities.")
 
-    if "team player" in text:
-        feedback.append("Instead of saying 'team player', give an example where you worked in a team.")
+        # Check for skills
+        if "skills" not in text:
+            feedback.append("Add a 'Skills' section to highlight your technical and soft skills.")
 
-    if "linkedin.com" not in text:
-        feedback.append("Include a link to your LinkedIn profile.")
+        # If no issues found
+        if not feedback:
+            feedback.append("Great job! Your resume covers all essential aspects.")
 
-    if len(text.split()) < 200:
-        feedback.append("Your resume seems short — try adding more accomplishments.")
+        return feedback
 
-    if not feedback:
-        feedback.append("Great job! Your resume looks solid.")
-
-    return feedback
+    except Exception as e:
+        return [f"Error generating feedback: {str(e)}"]
