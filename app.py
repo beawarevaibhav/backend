@@ -10,7 +10,8 @@ import io
 import os  # <-- You were missing this import
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "https://frontend-two-gamma-69.vercel.app"}})
+
 
 # 🔧 Database Config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///resumes.db'
