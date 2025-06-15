@@ -20,7 +20,10 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
 # 🌍 Enable CORS for frontend
+from flask_cors import CORS
+
 CORS(app, resources={r"/api/*": {"origins": "https://frontend-two-gamma-69.vercel.app"}})
+
 
 # 🛢️ Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///resumes.db'
